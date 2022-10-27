@@ -1,0 +1,8 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Workaround for spamming logs?
+exec >/dev/tty 2>&1
+
+# Check staged files.
+npx lint-staged
