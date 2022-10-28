@@ -1,3 +1,3 @@
-import { init } from './server/index.js';
+import { init } from './server';
 
 init();

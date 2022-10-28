@@ -35,6 +35,7 @@ module.exports = {
 		'default-case': 'error',
 		eqeqeq: 'error',
 		// Plugins
-		'prettier/prettier': ['error', { tabWidth: 2, useTabs: true }],
+		// 'prettier/prettier': ['error', { tabWidth: 2, useTabs: true }],
+		'prettier/prettier': 'error',
 	},
 };

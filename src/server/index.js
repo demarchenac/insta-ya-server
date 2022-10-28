@@ -1,8 +1,8 @@
 import express from 'express';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
-import { config } from '../config/index.js';
-import { router } from './api/index.js';
+import { config } from '../config';
+import { router } from './api';
 
 const { port } = config.http;
 
