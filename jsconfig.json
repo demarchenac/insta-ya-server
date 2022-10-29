@@ -1,0 +1,13 @@
+{
+	"compilerOptions": {
+		"baseUrl": ".",
+		"module": "CommonJS",
+		"paths": {
+			"@models/*": ["./src/database/models/*"],
+			"@config/*": ["./src/config/*"],
+			"@services/*": ["./src/app/services/*"],
+			"@styles/*": ["./src/styles/*"]
+		}
+	},
+	"exclude": ["node_modules"]
+}

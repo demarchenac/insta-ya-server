@@ -1,3 +1,5 @@
-import { init } from './server';
+import { initDatabase } from './database';
+import { initServer } from './server';
 
-init();
+initServer();
+initDatabase();

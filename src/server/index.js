@@ -1,7 +1,7 @@
 import express from 'express';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
-import { config } from '../config';
+import { config } from '@config';
 import { router } from './api';
 
 const { port } = config.http;
@@ -14,7 +14,7 @@ app.use(cookieParser());
 app.use('/api', router);
 app.use('/api/v1', router);
 
-export const init = () => {
+export const initServer = () => {
 	app.listen(port, () => {
 		// eslint-disable-next-line no-console
 		console.log(`InstaYa Server running @ localhost:${port}`);

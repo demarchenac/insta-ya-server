@@ -1,6 +1,9 @@
 node_modules/
 logs/*.log
-**/.env
 .DS_Store
 .thumbs
 dist/
+
+# Env related
+**/.env
+nodemon.json
