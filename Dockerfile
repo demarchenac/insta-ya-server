@@ -15,6 +15,8 @@ RUN npm install
 
 COPY ./src ./src
 
+COPY ./keys ./keys
+
 RUN npm run build
 
 # Remove dev dependencies
@@ -28,6 +30,7 @@ RUN touch /app/logs/access.log
 
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/keys ./keys
 
 RUN chown -R node:node /app
 RUN chmod 755 /app

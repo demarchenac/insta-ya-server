@@ -31,7 +31,7 @@ export const signAccessToken = async (payload) => {
 
 	const token = await sign(payload, key, {
 		algorithm: 'ES256',
-		expiresIn: '5m',
+		expiresIn: '15m',
 		header: {
 			kid: process.env.ACCESS_TOKEN_SECRET,
 		},
