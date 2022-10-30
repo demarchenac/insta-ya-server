@@ -19,3 +19,10 @@ export const signUpSchema = z.object({
 			},
 		),
 });
+
+export const signInSchema = z.object({
+	body: z.object({
+		email: z.string().email(),
+		password: z.string().min(5).max(16),
+	}),
+});

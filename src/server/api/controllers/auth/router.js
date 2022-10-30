@@ -1,8 +1,10 @@
 import express from 'express';
 import { hash } from 'argon2';
 import { User } from '@models/User';
+import { checkSignIn } from '@models/User/queries';
 import { logger, validate } from '../../middlewares';
-import { signUpSchema } from './schemas';
+import { signTokenPair, TOKEN_KEYS } from '../../middlewares/authorization';
+import { signInSchema, signUpSchema } from './schemas';
 
 const router = express.Router();
 
@@ -32,6 +34,34 @@ router.post('/sign-up', validate(signUpSchema), async (req, res) => {
 
 		// eslint-disable-next-line no-console
 		console.error(error);
+		res.status(500).json(error.message);
+	}
+});
+
+router.post('/sign-in', validate(signInSchema), async ({ body }, res) => {
+	try {
+		const payload = await checkSignIn(body);
+		if (!payload) {
+			res.status(404).json([
+				{
+					code: 'user_not_found',
+					message: 'Either the provided email or password are wrong.',
+				},
+			]);
+			return;
+		}
+
+		const { refreshToken, accessToken } = await signTokenPair(payload);
+
+		res
+			.cookie(TOKEN_KEYS.REFRESH, refreshToken, { httpOnly: true })
+			.cookie(TOKEN_KEYS.ACCESS, accessToken, { httpOnly: true })
+			.status(200)
+			.json({ message: 'Signed In' });
+	} catch (error) {
+		// eslint-disable-next-line no-console
+		console.error(error);
+		res.status(500).json(error.message);
 	}
 });
 

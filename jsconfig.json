@@ -4,9 +4,7 @@
 		"module": "CommonJS",
 		"paths": {
 			"@models/*": ["./src/database/models/*"],
-			"@config/*": ["./src/config/*"],
-			"@services/*": ["./src/app/services/*"],
-			"@styles/*": ["./src/styles/*"]
+			"@config/*": ["./src/config/*"]
 		}
 	},
 	"exclude": ["node_modules"]
