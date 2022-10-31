@@ -1,10 +1,10 @@
 import express from 'express';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
-import { config } from '@config';
+import { env } from '@config/env';
 import { router } from './api';
 
-const { port } = config.http;
+const { port } = env.http;
 
 const app = express();
 

@@ -15,9 +15,15 @@ export const checkSignIn = async ({ email, password }) => {
 	}
 
 	const payload = {
-		session: user._id,
+		id: user._id,
 		version: user.tokenVersion,
 	};
 
 	return payload;
+};
+
+export const tokenVersionMatchesUserTokenVersion = async ({ id, version }) => {
+	const user = await User.findById(id);
+
+	return user.tokenVersion === version;
 };

@@ -5,7 +5,7 @@ import helmet from 'helmet';
 import { createWriteStream } from 'fs';
 import { join } from 'path';
 
-import { config } from '@config';
+import { env } from '@config/env';
 import { AuthRouter } from './controllers/auth';
 import { UserRouter } from './controllers/user';
 
@@ -17,7 +17,7 @@ router.get('/', (_req, res) => {
 	);
 });
 
-const accessLogDirectory = config.log.access;
+const accessLogDirectory = env.log.access;
 
 const logStream = createWriteStream(join(__dirname, accessLogDirectory), {
 	flags: 'a',

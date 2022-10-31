@@ -1,4 +1,4 @@
-export const config = {
+export const env = {
 	http: {
 		port: process.env.PORT || process.env.HOST_PORT || 3000,
 	},

@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { config } from '@config';
+import { env } from '@config/env';
 
 export const initDatabase = async () => {
 	const options = {
@@ -8,7 +8,7 @@ export const initDatabase = async () => {
 	};
 
 	try {
-		await mongoose.connect(config.database.connectionString, options);
+		await mongoose.connect(env.database.connectionString, options);
 		// eslint-disable-next-line no-console
 		console.log('Connected to the database sucessfully!');
 	} catch (err) {
