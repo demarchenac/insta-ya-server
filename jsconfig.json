@@ -1,0 +1,11 @@
+{
+	"compilerOptions": {
+		"baseUrl": ".",
+		"module": "CommonJS",
+		"paths": {
+			"@models/*": ["./src/database/models/*"],
+			"@config/*": ["./src/config/*"]
+		}
+	},
+	"exclude": ["node_modules"]
+}

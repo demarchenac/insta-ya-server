@@ -1,30 +1,40 @@
-FROM debian:bullseye as builder
+# ---------- Base ----------
+FROM node:18-alpine AS base
 
-ARG NODE_VERSION=16.18.0
-
-RUN apt-get update; apt install -y curl
-RUN curl https://get.volta.sh | bash
-ENV VOLTA_HOME /root/.volta
-ENV PATH /root/.volta/bin:$PATH
-RUN volta install node@${NODE_VERSION}
-
-#######################################################################
-
-RUN mkdir /app
 WORKDIR /app
 
-ENV NODE_ENV production
+# ---------- Builder ----------
+# Creates:
+# - node_modules: production dependencies (no dev dependencies)
+# - dist: A production build compiled with Babel
+FROM base AS builder
 
-COPY . .
+COPY package*.json .babelrc ./
 
 RUN npm install
-FROM debian:bullseye
 
-COPY --from=builder /root/.volta /root/.volta
-COPY --from=builder /app /app
+COPY ./src ./src
 
-WORKDIR /app
-ENV NODE_ENV production
-ENV PATH /root/.volta/bin:$PATH
+COPY ./keys ./keys
 
-CMD [ "npm", "run", "start" ]
+RUN npm run build
+
+# Remove dev dependencies
+RUN npm prune --production 
+
+# ---------- Release ----------
+FROM base AS release
+
+RUN mkdir /app/logs
+RUN touch /app/logs/access.log
+
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/keys ./keys
+
+RUN chown -R node:node /app
+RUN chmod 755 /app
+
+USER node
+
+CMD ["node", "./dist/index.js"]

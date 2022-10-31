@@ -1,1 +1,12 @@
 node_modules/
+logs/*.log
+.DS_Store
+.thumbs
+dist/
+
+# Env related
+**/.env
+nodemon.json
+
+# keys from: https://8gwifi.org/jwsgen.jsp
+keys/*

@@ -2,3 +2,5 @@ Dockerfile
 .dockerignore
 node_modules
 .git
+dist
+nodemon.json
