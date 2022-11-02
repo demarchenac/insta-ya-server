@@ -4,11 +4,11 @@ import cors from 'cors';
 import { env } from '@config/env';
 import { router } from './api';
 
-const { port } = env.http;
+const { port, allowed_host } = env.http;
 
 const app = express();
 
-app.use(cors());
+app.use(cors({ origin: allowed_host, credentials: true }));
 app.use(express.json());
 app.use(cookieParser());
 app.use('/api', router);
