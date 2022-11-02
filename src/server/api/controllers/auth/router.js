@@ -67,9 +67,13 @@ router.post('/sign-in', validate(signInSchema), async ({ body }, res) => {
 
 		res
 			.cookie(TOKEN_KEYS.REFRESH, refreshToken, { httpOnly: true })
-			.cookie(TOKEN_KEYS.ACCESS, accessToken, { httpOnly: true })
 			.status(200)
-			.json({ message: 'Signed In' });
+			.json({
+				payload: {
+					[TOKEN_KEYS.ACCESS]: accessToken,
+				},
+				message: 'Signed In',
+			});
 	} catch (error) {
 		// eslint-disable-next-line no-console
 		console.error(error);
@@ -106,9 +110,13 @@ router.post('/refresh', async (req, res) => {
 
 		return res
 			.cookie(TOKEN_KEYS.REFRESH, refreshToken, { httpOnly: true })
-			.cookie(TOKEN_KEYS.ACCESS, accessToken, { httpOnly: true })
 			.status(200)
-			.json({ message: 'Tokens updated!' });
+			.json({
+				payload: {
+					[TOKEN_KEYS.ACCESS]: accessToken,
+				},
+				message: 'Tokens updated!',
+			});
 	} catch (error) {
 		// eslint-disable-next-line no-console
 		console.error(error);

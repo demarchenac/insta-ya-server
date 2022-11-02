@@ -39,7 +39,7 @@ const signAccessToken = async (payload) => {
 
 	const token = await sign(payload, key, {
 		algorithm: 'ES256',
-		expiresIn: '5m',
+		expiresIn: '1m',
 		header: accessHeader,
 	});
 
@@ -69,15 +69,18 @@ export const verifyToken = (token, kind = 'access') => {
 	return { id, version };
 };
 
+const headerLength = 'Bearer '.length;
+
 export const hasSession = (req, res, next) => {
-	const { lemon_qid: token } = req.cookies;
+	const { authorization } = req.headers;
+	const token = authorization.substring(headerLength);
 
 	if (!token) {
 		return res.status(401).json([
 			{
 				code: 'session_expired',
 				message:
-					'You session has expired. Automatic renewal should happen automatically.',
+					'You session has expired. Renewal should happen automatically.',
 			},
 		]);
 	}
