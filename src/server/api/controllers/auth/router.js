@@ -24,8 +24,14 @@ router.get('/private-ping', hasSession, async ({ session_payload }, res) => {
 
 router.post('/sign-up', validate(signUpSchema), async (req, res) => {
 	try {
-		const { name, lastName, password, email } = req.body;
-		const payload = { name, lastName, password: await hash(password), email };
+		const { name, lastName, email, identificationNumber, password } = req.body;
+		const payload = {
+			name,
+			lastName,
+			email,
+			identificationNumber,
+			password: await hash(password),
+		};
 
 		const user = new User(payload);
 		await user.save();

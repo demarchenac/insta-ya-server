@@ -4,6 +4,7 @@ import { readFileSync } from 'fs';
 import { join } from 'path';
 
 import { env } from '@config/env';
+import { tokenVersionMatchesUserTokenVersion } from '@models/User/queries';
 
 /**
  * Don't worry if you don't understand these keywords, I'm not going to explain
@@ -39,7 +40,7 @@ const signAccessToken = async (payload) => {
 
 	const token = await sign(payload, key, {
 		algorithm: 'ES256',
-		expiresIn: '1m',
+		expiresIn: '15m',
 		header: accessHeader,
 	});
 
@@ -71,7 +72,7 @@ export const verifyToken = (token, kind = 'access') => {
 
 const headerLength = 'Bearer '.length;
 
-export const hasSession = (req, res, next) => {
+export const hasSession = async (req, res, next) => {
 	const { authorization } = req.headers;
 	const token = authorization.substring(headerLength);
 
@@ -86,7 +87,18 @@ export const hasSession = (req, res, next) => {
 	}
 
 	try {
-		req.session_payload = verifyToken(token);
+		const payload = verifyToken(token);
+		const versionMatches = await tokenVersionMatchesUserTokenVersion(payload);
+
+		if (!versionMatches) {
+			return res.status(403).json([
+				{
+					code: 'version_mismatch',
+					message: 'Sign in required',
+				},
+			]);
+		}
+		req.session_payload = payload;
 	} catch (error) {
 		// eslint-disable-next-line no-console
 		console.error(error);
