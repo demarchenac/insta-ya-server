@@ -1,9 +1,10 @@
 import mongoose, { Schema } from 'mongoose';
 
-const collection = 'users';
+export const collection = 'users';
 
 const objectSchema = {
 	name: { type: String, required: true },
+	identificationNumber: { type: String, required: true, unique: true },
 	lastName: { type: String, required: true },
 	password: { type: String, required: true, select: false },
 	email: { type: String, required: true, unique: true },
@@ -14,6 +15,4 @@ const options = { timestamps: true };
 
 const schema = new Schema(objectSchema, options);
 
-const User = mongoose.model(collection, schema);
-
-export { User };
+export const User = mongoose.model(collection, schema);

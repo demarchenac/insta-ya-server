@@ -24,8 +24,14 @@ router.get('/private-ping', hasSession, async ({ session_payload }, res) => {
 
 router.post('/sign-up', validate(signUpSchema), async (req, res) => {
 	try {
-		const { name, lastName, password, email } = req.body;
-		const payload = { name, lastName, password: await hash(password), email };
+		const { name, lastName, email, identificationNumber, password } = req.body;
+		const payload = {
+			name,
+			lastName,
+			email,
+			identificationNumber,
+			password: await hash(password),
+		};
 
 		const user = new User(payload);
 		await user.save();
@@ -67,9 +73,13 @@ router.post('/sign-in', validate(signInSchema), async ({ body }, res) => {
 
 		res
 			.cookie(TOKEN_KEYS.REFRESH, refreshToken, { httpOnly: true })
-			.cookie(TOKEN_KEYS.ACCESS, accessToken, { httpOnly: true })
 			.status(200)
-			.json({ message: 'Signed In' });
+			.json({
+				payload: {
+					[TOKEN_KEYS.ACCESS]: accessToken,
+				},
+				message: 'Signed In',
+			});
 	} catch (error) {
 		// eslint-disable-next-line no-console
 		console.error(error);
@@ -106,9 +116,13 @@ router.post('/refresh', async (req, res) => {
 
 		return res
 			.cookie(TOKEN_KEYS.REFRESH, refreshToken, { httpOnly: true })
-			.cookie(TOKEN_KEYS.ACCESS, accessToken, { httpOnly: true })
 			.status(200)
-			.json({ message: 'Tokens updated!' });
+			.json({
+				payload: {
+					[TOKEN_KEYS.ACCESS]: accessToken,
+				},
+				message: 'Tokens updated!',
+			});
 	} catch (error) {
 		// eslint-disable-next-line no-console
 		console.error(error);

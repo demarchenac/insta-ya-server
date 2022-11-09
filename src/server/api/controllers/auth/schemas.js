@@ -5,9 +5,17 @@ export const signUpSchema = z.object({
 		.object({
 			name: z.string().min(3).max(50),
 			lastName: z.string().min(3).max(50),
+			identificationNumber: z
+				.string()
+				.min(3)
+				.max(11)
+				.refine((num) => !isNaN(num), { message: 'Not a number' })
+				.refine((num) => !isNaN(num) && parseInt(num) > 99, {
+					message: 'Minimum value is 100',
+				}),
+			email: z.string().email(),
 			password: z.string().min(5).max(16),
 			passwordConfirmation: z.string().min(5).max(16),
-			email: z.string().email(),
 		})
 		.refine(
 			({ password, passwordConfirmation }) =>
