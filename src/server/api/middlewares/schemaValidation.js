@@ -8,6 +8,8 @@ export const validate = (schema) => (req, res, next) => {
 
 		next();
 	} catch (error) {
-		return res.status(400).send(error.errors);
+		// eslint-disable-next-line no-console
+		console.error(error);
+		return res.status(400).json(error);
 	}
 };
